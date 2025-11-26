@@ -3,6 +3,9 @@ package main
 import (
 	"book-store/internal/config"
 	"book-store/internal/models"
+	"book-store/internal/repository"
+	"book-store/internal/services"
+	"book-store/internal/transport"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +18,13 @@ func main() {
 		log.Fatal("Не удалось выполнить миграции", err)
 	}
 
+	genreRep := repository.NewGenreRepository(db)
+
+	genreService := services.NewGenreService(genreRep)
+
 	r := gin.Default()
+
+	transport.RegisterRoutes(r, genreService)
 
 	err := r.Run()
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 type GenreService interface {
 	Create(req models.GenreCreateRequest) error
 	GetAllGenres() ([]models.Genre, error)
-	Update(id uint, req *models.GenreUpdateRequest) (*models.Genre, error)
+	Update(id uint, req models.GenreUpdateRequest) (*models.Genre, error)
 	Delete(id uint) error
 }
 
@@ -39,8 +39,8 @@ func (s *genreService) GetAllGenres() ([]models.Genre, error) {
 	return genre, err
 }
 
-func (s *genreService) Update(id uint, req *models.GenreUpdateRequest) (*models.Genre, error) {
-	var updated *models.Genre
+func (s *genreService) Update(id uint, req models.GenreUpdateRequest) (*models.Genre, error) {
+	var updated models.Genre
 
 	if req.Name != nil {
 		updated.Name = *req.Name
@@ -52,7 +52,7 @@ func (s *genreService) Update(id uint, req *models.GenreUpdateRequest) (*models.
 		return nil, err
 	}
 
-	return updated, err
+	return &updated, err
 }
 
 func (s *genreService) Delete(id uint) error {
