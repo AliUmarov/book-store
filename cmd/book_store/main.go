@@ -19,12 +19,14 @@ func main() {
 	}
 
 	genreRep := repository.NewGenreRepository(db)
+	bookRepo := repository.NewBookRepository(db)
 
 	genreService := services.NewGenreService(genreRep)
+	bookService := services.NewBookService(bookRepo)
 
 	r := gin.Default()
 
-	transport.RegisterRoutes(r, genreService)
+	transport.RegisterRoutes(r, genreService, bookService)
 
 	err := r.Run()
 	if err != nil {

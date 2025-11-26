@@ -7,9 +7,9 @@ import (
 )
 
 type BookRepository interface {
-	Create(book models.Book) error
+	Create(book *models.Book) error
 	GetAllBooks() ([]models.Book, error)
-	Update(book *models.Book) error
+	Update(id uint, book models.Book) error
 	Delete(id uint) error
 }
 
@@ -21,14 +21,14 @@ func NewBookRepository(db *gorm.DB) BookRepository {
 	return &gormBookRepository{db: db}
 }
 
-func (r *gormBookRepository) Create(book models.Book) error {
+func (r *gormBookRepository) Create(book *models.Book) error {
 	return r.db.Create(book).Error
 }
 
 func (r *gormBookRepository) GetAllBooks() ([]models.Book, error) {
 	var books []models.Book
 
-	err := r.db.Find(books).Error
+	err := r.db.Find(&books).Error
 
 	if err != nil {
 		return nil, err
@@ -37,10 +37,10 @@ func (r *gormBookRepository) GetAllBooks() ([]models.Book, error) {
 	return books, err
 }
 
-func (r *gormBookRepository) Update(book *models.Book) error {
-	return r.db.Updates(&book).Error
+func (r *gormBookRepository) Update(id uint, book models.Book) error {
+	return r.db.Where("id = ?", id).Updates(book).Error
 }
 
 func (r *gormBookRepository) Delete(id uint) error {
-	return r.db.Delete(id).Error
+	return r.db.Delete(&models.Book{}, id).Error
 }
