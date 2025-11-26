@@ -9,7 +9,7 @@ import (
 type GenreRepository interface {
 	Create(genre *models.Genre) error
 	GetGenres() ([]models.Genre, error)
-	Update(genre *models.Genre) error
+	Update(id uint, genre *models.Genre) error
 	Delete(id uint) error
 }
 
@@ -37,8 +37,8 @@ func (r *gormGenreRepository) GetGenres() ([]models.Genre, error) {
 	return genres, err
 }
 
-func (r *gormGenreRepository) Update(genre *models.Genre) error {
-	return r.db.Updates(&genre).Error
+func (r *gormGenreRepository) Update(id uint, genre *models.Genre) error {
+	return r.db.Where("id = ?", id).Updates(&genre).Error
 }
 
 func (r *gormGenreRepository) Delete(id uint) error {
